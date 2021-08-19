@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-
+  #this says, go to:
+   #the controller called products and look for
+   # the action called index (method)
   root to: 'products#index'
 
   resources :products, only: [:index, :show]
