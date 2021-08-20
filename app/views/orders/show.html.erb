@@ -5,7 +5,28 @@
   </header>
 
   <div class="order-summary jumbotron">
-    <h4>Thank you for your order!</h4>
+    <h2>Thank you for your order!</h2>
+    <% @order.line_items.each {|item| %>
+    <div class = 'order_item_render'>
+      <% product = Product.find(item.product_id) %>
+      <h3 class= 'order_item_name'><%= product.name %></h3>
+      <h4> Quantity: <%= item.quantity%> </h4>
+      <h4 class= 'order_item_name'> Cost: <%=humanized_money_with_symbol product.price_cents / 100.00%></h4>
+      <div>
+        <%= image_tag product.image, class: 'img' %>
+      </div>
+      <aside> <%= product.description %></aside>
+      <% puts item.inspect %>
+      <% puts product.inspect %>
+      </div>
+      <% } %>
+    <div>
+    <% puts "ORDER STRING #{@order.inspect}"%>
+    <% puts "Line Item #{@order.line_items.inspect}"%>
+    <h4> Total: <%=humanized_money_with_symbol @order.total_cents / 100.00%></h4>
+    <h4> <%= @order.email %> </h4>
+    </div>
+
   </div>
 
   <%= link_to "Continue Shopping", root_path, class: 'btn btn-lg btn-primary' %>
