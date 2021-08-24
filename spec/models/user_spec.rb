@@ -46,4 +46,36 @@ RSpec.describe User, type: :model do
       expect(@user.errors.full_messages[0]).to eq("Password is too short (minimum is 3 characters)")
     end
   end
+
+  describe '.authenticate_with_credentials' do
+    
+    before(:each) do 
+      @user = User.new(first_name: 'billy', last_name: 'bob', email: 'billybob@email.com', password: 'thisTest', password_confirmation: 'thisTest')
+      @user.save
+    end
+    it 'should login to the correct account when provided the correct username and password' do
+      expect(User.authenticate_with_credentials('billybob@email.com', 'thisTest')).to eq(@user)
+    end
+
+    it 'should not log the user into an account if the email is correct, and password is incorrect' do
+      expect(User.authenticate_with_credentials('billybob@email.com', 'wrongPassword')).to eq(nil)
+    end
+
+    it 'should not log the user into an account if the email is incorrect, and password is correct' do
+      expect(User.authenticate_with_credentials('dogsemail@email.com', 'thisTest')).to eq(nil)
+    end
+  end
+
+  describe 'edge cases' do
+    before(:each) do 
+      @user = User.new(first_name: 'billy', last_name: 'bob', email: 'billybob@email.com', password: 'thisTest', password_confirmation: 'thisTest')
+      @user.save
+    end
+    it 'login using email regardless of white spacing' do
+      expect(User.authenticate_with_credentials('     billybob@email.com     ', 'thisTest')).to eq(@user)
+    end
+    it 'login using email regardless of random casing' do
+      expect(User.authenticate_with_credentials('biLLyBob@email.com', 'thisTest')).to eq(@user)
+    end
+  end
 end

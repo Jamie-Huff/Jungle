@@ -1,5 +1,14 @@
 <h1>Signup!</h1>
 
+<% flash.each do |type, msg| %>
+  <div>
+    <% msg.each do |l| %>
+      <div>
+      <%= l %>
+      </div>
+      <% end %>
+  </div>
+<% end %>
 <%= form_for :user, url: '/users' do |f| %>
 
   First Name: <%= f.text_field :first_name %>
